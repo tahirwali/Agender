@@ -1,0 +1,115 @@
+{
+ "parts": [
+  "train",
+  "validation",
+  "calibration",
+  "test"
+ ],
+ "shares": [
+  0.6,
+  0.1,
+  0.1,
+  0.2
+ ],
+ "seeds": [
+  42,
+  7,
+  123,
+  2024,
+  99
+ ],
+ "counts": {
+  "repeat_0": {
+   "train": {
+    "female": 78,
+    "male": 271
+   },
+   "validation": {
+    "female": 13,
+    "male": 45
+   },
+   "calibration": {
+    "female": 13,
+    "male": 46
+   },
+   "test": {
+    "female": 26,
+    "male": 90
+   }
+  },
+  "repeat_1": {
+   "train": {
+    "female": 78,
+    "male": 271
+   },
+   "validation": {
+    "female": 13,
+    "male": 45
+   },
+   "calibration": {
+    "female": 13,
+    "male": 46
+   },
+   "test": {
+    "female": 26,
+    "male": 90
+   }
+  },
+  "repeat_2": {
+   "train": {
+    "female": 78,
+    "male": 271
+   },
+   "validation": {
+    "female": 13,
+    "male": 45
+   },
+   "calibration": {
+    "female": 13,
+    "male": 46
+   },
+   "test": {
+    "female": 26,
+    "male": 90
+   }
+  },
+  "repeat_3": {
+   "train": {
+    "female": 78,
+    "male": 271
+   },
+   "validation": {
+    "female": 13,
+    "male": 45
+   },
+   "calibration": {
+    "female": 13,
+    "male": 46
+   },
+   "test": {
+    "female": 26,
+    "male": 90
+   }
+  },
+  "repeat_4": {
+   "train": {
+    "female": 78,
+    "male": 271
+   },
+   "validation": {
+    "female": 13,
+    "male": 45
+   },
+   "calibration": {
+    "female": 13,
+    "male": 46
+   },
+   "test": {
+    "female": 26,
+    "male": 90
+   }
+  }
+ },
+ "source": "figshare 7267433",
+ "people": 582
+}

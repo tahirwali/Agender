@@ -1,0 +1,22 @@
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.pytest_cache/
+outputs/
+agender_outputs/
+*.zip
+data/
+catboost_info/
+
+# kept local
+paper/
+docs/PROGRESS_LOG.md
+docs/WORKPLAN.md
+
+# kept local
+agender/replicate.py
+agender/step2a.py
+notebooks/step2a_replicate.ipynb
+docs/step2a_replicate.md
+tests/test_step2a.py
+scripts/
