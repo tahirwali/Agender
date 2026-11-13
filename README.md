@@ -18,6 +18,7 @@ Everything runs on Kaggle's free tier, on the CPU.
 | 1 | `step1_splits.ipynb` | Applies the cleaning rules, builds one row per Copenhagen student, and makes the fixed four-part splits (checked against `splits/`) | CPU |
 | 2B | `step2b_audit.ipynb` | Leakage audit: five attackers, conformal sets per subscriber (LAT age and gender, Copenhagen gender) | CPU |
 | 3 | `step3_release.ipynb` | Privacy-aware QUBO release selection against five other defences; privacy-utility curves; exact check of the solver | CPU |
+| F | `stepF_figures.ipynb` | Draws every figure and table of the paper from the saved outputs of Steps 2B and 3, with 95 % intervals over the repeats and paired comparisons | CPU |
 
 ## Data
 
@@ -27,7 +28,8 @@ The datasets are downloaded by the notebooks and are not stored here. See `docs/
 
 1. Zip this folder and upload it to Kaggle as a dataset named `agender-code`.
 2. Import a notebook from `notebooks/` and add `agender-code` as an input. Step 1 also needs the saved
-   output of Step 0, and Steps 2B and 3 need the saved output of Step 1.
+   output of Step 0, Steps 2B and 3 need the saved output of Step 1, and
+   Step F needs the saved outputs of Steps 2B and 3.
 3. Use **Save Version -> Save & Run All**.
 
 The notebooks write every result table and figure from code; no number is typed by hand. Settings are
