@@ -161,17 +161,18 @@ class Writer:
         self.written.append(f"figures/{name}")
 
     def table(self, frame, name, caption, label, columns_format=None, note=None):
+        """Every table spans both columns (table*) and is scaled to the text width, so wide ones still fit."""
         base = self.out / "tables" / name
         frame.to_csv(base.with_suffix(".csv"), index=False)
         head = " & ".join(escape(c) for c in frame.columns) + r" \\"
         body = [" & ".join(escape(str(v)) for v in row) + r" \\" for row in frame.itertuples(index=False)]
         spec = columns_format or "l" + "r" * (len(frame.columns) - 1)
-        lines = [r"\begin{table}[t]", r"\centering", r"\caption{" + caption + "}", r"\label{" + label + "}",
-                 r"\small", r"\begin{tabular}{" + spec + "}", r"\toprule", head, r"\midrule", *body,
-                 r"\bottomrule", r"\end{tabular}"]
+        lines = [r"\begin{table*}[t]", r"\centering", r"\caption{" + caption + "}", r"\label{" + label + "}",
+                 r"\small", r"\resizebox{\textwidth}{!}{%", r"\begin{tabular}{" + spec + "}", r"\toprule", head,
+                 r"\midrule", *body, r"\bottomrule", r"\end{tabular}}"]
         if note:
             lines += [r"\par\smallskip", r"\footnotesize " + note]
-        lines.append(r"\end{table}")
+        lines.append(r"\end{table*}")
         base.with_suffix(".tex").write_text("\n".join(lines) + "\n", encoding="utf-8")
         self.written.append(f"tables/{name}")
 
@@ -424,9 +425,10 @@ def fig_tradeoff(W, I):
     ax.axvline(0, color=MUTED, ls="--", lw=0.8)
     ax.set_yticks(range(len(names)))
     ax.set_yticklabels([DEFENCE_NAMES[d] for d in reversed(names)])
-    reference_note = "beyond the no-information attacker" if I.has_reference_in_points() else "(no reference in input)"
-    ax.set_xlabel(f"Gender correctly pinned down at 90 %,\n{reference_note} (percentage points)")
-    ax.set_title("(b) Gender exposure at the operating point", loc="left")
+    reference_note = "beyond no information" if I.has_reference_in_points() else "(no reference in input)"
+    ax.set_xlabel(f"Gender correctly pinned down at 90 %\n{reference_note} (percentage points)")
+    ax.set_ylim(-0.5, len(names) - 0.3)            # room for the label above the top row
+    ax.set_title("(b) Gender exposure at the operating point", loc="left", pad=8)
     tidy(ax)
     fig.tight_layout()
     W.figure(fig, "fig_tradeoff", rows)
@@ -454,7 +456,7 @@ def table_defences(W, I):
         row = {"Defence": DEFENCE_NAMES[defence]}
         for column, label, percent in POINT_MEASURES:
             if column == "n_released":
-                row[label] = fmt(part[column].mean(), 1)
+                row[label] = fmt(part[column].mean(), 0)
             else:
                 row[label] = fmt_interval(*mean_interval(part[column]), percent=percent)
         rows.append(row)

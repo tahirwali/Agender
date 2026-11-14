@@ -41,7 +41,7 @@ def test_figures_from_saved_outputs(tmp_path, monkeypatch):
     for name in ("fig_attackers", "fig_conformal", "fig_tradeoff", "fig_information"):
         assert (out / "figures" / f"{name}.pdf").exists() and (out / "figures" / f"{name}.csv").exists()
     for name in ("table_attackers", "table_conformal", "table_defences", "table_paired", "table_releases"):
-        assert (out / "tables" / f"{name}.tex").read_text().startswith(r"\begin{table}")
+        assert (out / "tables" / f"{name}.tex").read_text().startswith(r"\begin{table*}")
     assert not result["notes"]                     # the reference attacker is present in both inputs
     defences = pd.read_csv(out / "tables" / "table_defences.csv")
     assert defences.iloc[0]["Leakage"].startswith("1.000")
