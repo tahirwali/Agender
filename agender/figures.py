@@ -405,9 +405,9 @@ def fig_tradeoff(W, I):
     ax.text(0.02, 0.905, "90 % of the utility kept", fontsize=6.5, color=MUTED, transform=ax.get_yaxis_transform())
     ax.set_xlabel("Leakage (1 = as much as releasing everything, 0 = guessing)")
     ax.set_ylabel("Utility kept (share of the full release's $R^2$)")
-    ax.set_title("(a) Every candidate release (small) and each defence's operating point (large)", loc="left")
+    ax.set_title("(a) Every candidate release (small) and the release each defence chooses (large)", loc="left")
     ax.set_ylim(max(0.0, means["utility_kept_test"].min() - 0.05), 1.03)
-    ax.legend(loc="lower right", title="Operating point", title_fontsize=7, markerscale=0.8)
+    ax.legend(loc="lower right", title="Chosen release", title_fontsize=7, markerscale=0.8)
     tidy(ax, "both")
 
     ax = axes[1]
@@ -426,9 +426,9 @@ def fig_tradeoff(W, I):
     ax.set_yticks(range(len(names)))
     ax.set_yticklabels([DEFENCE_NAMES[d] for d in reversed(names)])
     reference_note = "beyond no information" if I.has_reference_in_points() else "(no reference in input)"
-    ax.set_xlabel(f"Gender correctly pinned down at 90 %\n{reference_note} (percentage points)")
+    ax.set_xlabel(f"Gender correctly pinned down at 90 %\n{reference_note} (%)")
     ax.set_ylim(-0.5, len(names) - 0.3)            # room for the label above the top row
-    ax.set_title("(b) Gender exposure at the operating point", loc="left", pad=8)
+    ax.set_title("(b) Gender exposure of the chosen release", loc="left", pad=8)
     tidy(ax)
     fig.tight_layout()
     W.figure(fig, "fig_tradeoff", rows)
@@ -436,7 +436,7 @@ def fig_tradeoff(W, I):
 
 POINT_MEASURES = [("n_released", "Attributes released", False), ("utility_kept_test", "Utility kept", False),
                   ("leakage_test", "Leakage", False), ("gender_auc", "Gender AUC", False),
-                  ("age_auc", "Age AUC", False), ("gender_excess", "Gender exposure (pp)", True),
+                  ("age_auc", "Age AUC", False), ("gender_excess", "Gender exposure (%)", True),
                   ("age_mean_set", "Age set size", False)]
 
 
@@ -461,10 +461,10 @@ def table_defences(W, I):
                 row[label] = fmt_interval(*mean_interval(part[column]), percent=percent)
         rows.append(row)
     W.table(pd.DataFrame(rows), "table_defences",
-            "Each defence at its operating point, chosen on validation (lowest validation leakage among releases that "
+            "The release each defence chooses on validation (lowest validation leakage among releases that "
             "keep at least 90\\% of the validation utility). Test values, mean over five repeats with the 95\\% "
             "interval. Gender exposure: subscribers whose gender is correctly pinned down by a 90\\% class-"
-            "conditional set, minus the same share for the no-information attacker, in percentage points.",
+            "conditional set, minus the same share for the no-information attacker, in \\% of test subscribers.",
             "tab:defences", "l" + "r" * len(POINT_MEASURES))
 
 
@@ -478,7 +478,7 @@ def table_paired(W, I):
         other = frame.loc[defence]
         common = ours.index.intersection(other.index)
         for column, label in (("leakage_test", "Leakage"), ("utility_kept_test", "Utility kept"),
-                              ("gender_excess", "Gender exposure")):
+                              ("gender_excess", "Gender exposure (%)")):
             r = paired(ours.loc[common, column], other.loc[common, column])
             out[f"{defence} / {column}"] = r
             scale, d = (100, 1) if column == "gender_excess" else (1, 3)
@@ -504,7 +504,7 @@ def table_releases(W, I):
              "Released attributes": str(getattr(r, "released", "")).replace("|", ", ")}
             for r in part.itertuples()]
     W.table(pd.DataFrame(rows), "table_releases",
-            "Attributes released at the operating point of each QUBO selector, per repeat.", "tab:releases",
+            "Attributes in the release each QUBO selector chooses, per repeat.", "tab:releases",
             "llll")
 
 
