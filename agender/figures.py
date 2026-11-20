@@ -88,7 +88,8 @@ def find_inputs(root):
     found = {}
     for step, names in INPUT_FILES.items():
         for name in names:
-            hits = sorted(Path(root).rglob(name))
+            # Step 4 writes files with the same names for Iranian Churn; those belong to figures_churn
+            hits = sorted(p for p in Path(root).rglob(name) if p.parent.name != "iranian_release")
             found[name] = hits[0] if hits else None
     return found
 
@@ -641,10 +642,16 @@ def run(input_root, out_dir, log=print):
                        ("numbers", collect_numbers)):
         draw(W, I)
         log(f"{name} done")
+    from .figures_churn import find_churn_inputs, run_churn
+    churn_found = find_churn_inputs(input_root)
+    churn_note = run_churn(W, churn_found, log=log)        # None when the Step 4 part was drawn
+    if churn_note is None:
+        found.update(churn_found)
     with open(W.out / "numbers.json", "w") as f:
         json.dump(W.numbers, f, indent=1, default=float)
     manifest = {"inputs": {n: {"path": str(p), "sha256": sha256(p)} for n, p in found.items() if p},
-                "missing_inputs": missing, "written": W.written, "notes": notes}
+                "missing_inputs": missing, "written": W.written, "notes": notes,
+                "step4": churn_note or "drawn"}
     with open(W.out / "manifest.json", "w") as f:
         json.dump(manifest, f, indent=1)
-    return {"written": len(W.written), "missing_inputs": missing, "notes": notes}
+    return {"written": len(W.written), "missing_inputs": missing, "notes": notes, "step4": churn_note or "drawn"}
